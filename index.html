@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>College Website</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="wave-background" aria-hidden="true">
+    <canvas id="waveCanvas"></canvas>
+</div>
+
+    <h1>Welcome to Our UNION</h1>
+    <nav>
+    <a href="index.html">Home</a>
+    <a href="#about">About</a>
+    <a href="students.html">Students</a>
+    <a href="events.html">Events</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contact.html">Contact</a>
+</nav>
+<header class="hero">
+    <video class="hero-video" autoplay muted loop playsinline>
+    <source src="assets/videos/campus.mp4" type="video/mp4">
+</video>
+
+    <div class="hero-content">
+
+        <p class="hero-small">WELCOME TO OUR UNION</p>
+
+        <h1>Learn. Grow. Lead.</h1>
+
+        <p class="hero-description">
+            Building knowledge, character and a brighter future.
+        </p>
+
+        <a href="about.html" class="hero-button">
+            Explore More
+        </a>
+
+    </div>
+
+</header>
+<section class="statement-section">
+
+    <p class="section-label">OUR VISION</p>
+
+   <h2 class="statement-title">
+    <span class="motion-line line-one">HUB OF IGNITING</span>
+    <span class="motion-line line-two">KEY MIND</span>
+    <span class="motion-line line-three">ACTIVITIES</span>
+</h2>
+
+    <p class="statement-description">
+        Inspiring young minds through knowledge,
+        creativity and meaningful activities.
+    </p>
+
+</section>
+
+<section class="Union-details">
+
+    <p class="details-label">DISCOVER OUR UNION</p>
+
+    <h2>
+        More Than<br>
+        Just Education.
+    </h2>
+
+    <p class="details-description">
+        A place where young minds learn, grow,
+        explore their talents and build their future.
+    </p>
+
+    <div class="details-stats">
+
+        <div class="stat">
+            <h3>01</h3>
+            <p>Knowledge</p>
+        </div>
+
+        <div class="stat">
+            <h3>02</h3>
+            <p>Creativity</p>
+        </div>
+
+        <div class="stat">
+            <h3>03</h3>
+            <p>Excellence</p>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="photo-section">
+
+    <p class="photo-label">LIFE AT OUR UNION</p>
+
+    <h2 class="photo-heading">
+        Moments That<br>
+        Stay With Us<span>.</span>
+    </h2>
+
+    
+<div class="photo-track">
+
+    <div class="photo-card">
+        <img src="assets/images/college1.jpg" alt="Campus life">
+        <div class="photo-caption">Campus Life</div>
+    </div>
+
+    <div class="photo-card">
+        <img src="assets/images/college2.jpg" alt="Union activities">
+        <div class="photo-caption">Activities</div>
+    </div>
+
+    <div class="photo-card">
+        <img src="assets/images/college3.jpg" alt="Union events">
+        <div class="photo-caption">Events</div>
+    </div>
+
+    <div class="photo-card">
+        <img src="assets/images/college4.jpg" alt="Student life">
+        <div class="photo-caption">Student Life</div>
+    </div>
+
+    <div class="photo-card">
+        <img src="assets/images/college5.jpg" alt="Union programs">
+        <div class="photo-caption">Programs</div>
+    </div>
+
+    <div class="photo-card">
+        <img src="assets/images/college6.jpg" alt="Union community">
+        <div class="photo-caption">Community</div>
+    </div>
+
+</div>
+
+
+</section>
+
+<script>
+    const statement = document.querySelector('.statement-section');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                statement.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.2
+    });
+
+    observer.observe(statement);
+</script>
+
+<script>
+const section = document.querySelector(".statement-section");
+
+const lineOne = document.querySelector(".line-one");
+const lineTwo = document.querySelector(".line-two");
+const lineThree = document.querySelector(".line-three");
+
+function moveTextOnScroll() {
+    if (!section || !lineOne || !lineTwo || !lineThree) return;
+
+    const rect = section.getBoundingClientRect();
+    const screenHeight = window.innerHeight;
+
+    let progress = (screenHeight - rect.top) /
+                   (screenHeight + rect.height);
+
+    progress = Math.max(0, Math.min(1, progress));
+
+    const distance = 180;
+
+    lineOne.style.transform =
+        `translateX(${-distance + progress * distance}px)`;
+
+    lineTwo.style.transform =
+        `translateX(${distance - progress * distance}px)`;
+
+    lineThree.style.transform =
+        `translateX(${-distance + progress * distance}px)`;
+}
+
+window.addEventListener("scroll", moveTextOnScroll, {
+    passive: true
+});
+
+moveTextOnScroll();
+</script>
+
+<script>
+const photoSection = document.querySelector(".photo-section");
+const photoTrack = document.querySelector(".photo-track");
+
+function movePhotosOnScroll() {
+    if (!photoSection || !photoTrack) return;
+
+    const rect = photoSection.getBoundingClientRect();
+    const screenHeight = window.innerHeight;
+
+    const progress = Math.max(0, Math.min(
+        1,
+        (screenHeight - rect.top) /
+        (screenHeight + rect.height)
+    ));
+
+    const distance = photoTrack.scrollWidth - window.innerWidth;
+
+   photoTrack.style.transform =
+    `translateX(${-progress * distance}px) rotate(-4deg)`;
+}
+
+window.addEventListener("scroll", movePhotosOnScroll, {
+    passive: true
+});
+
+window.addEventListener("resize", movePhotosOnScroll);
+
+movePhotosOnScroll();
+</script>
+<script>
+const canvas = document.getElementById("waveCanvas");
+const ctx = canvas.getContext("2d");
+
+let width = 0;
+let height = 0;
+let scrollY = window.scrollY;
+let currentScroll = scrollY;
+let animationFrame = null;
+
+function resizeCanvas() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+
+    width = window.innerWidth;
+    height = window.innerHeight;
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+
+
+
+
+function drawStar(x, y, radius, rotation) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rotation);
+
+    const armWidth = radius * 0.28;
+    const armLength = radius;
+
+    ctx.shadowColor = "#168bff";
+    ctx.shadowBlur = radius * 0.7;
+    ctx.fillStyle = "rgba(35, 135, 255, 0.35)";
+    ctx.strokeStyle = "rgba(160, 215, 255, 0.95)";
+    ctx.lineWidth = 1.5;
+
+    // Six solid rectangular arms
+    for (let i = 0; i < 6; i++) {
+        ctx.save();
+        ctx.rotate((Math.PI * 2 * i) / 6);
+
+        ctx.fillRect(
+            -armWidth / 2,
+            -armLength,
+            armWidth,
+            armLength + armWidth / 2
+        );
+
+        ctx.strokeRect(
+            -armWidth / 2,
+            -armLength,
+            armWidth,
+            armLength + armWidth / 2
+        );
+
+        ctx.restore();
+    }
+
+    // Fill the centre so there are no holes
+    ctx.beginPath();
+    ctx.arc(0, 0, armWidth * 0.72, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+}
+function drawWave(startX, endX, phase, color, starAtEnd, rotation, starY, starSize) {
+    const sway = Math.sin(phase) * width * 0.035;
+
+    ctx.beginPath();
+    ctx.moveTo(startX, 0);
+
+    ctx.bezierCurveTo(
+        startX + sway,
+        height * 0.28,
+        endX - sway,
+        height * 0.72,
+        endX,
+        height
+    );
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth =8;
+    ctx.shadowColor = "#168bff";
+    ctx.shadowBlur = 12;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+  if (starAtEnd) {
+    let starX = endX - width * 0.055;
+
+    if (starY < 0.5) {
+        starX = endX - width * 0.095;
+    }
+
+    let starYPosition = height * starY;
+
+if (starY < 0.5) {
+    const scrollProgress = Math.max(
+        0,
+        Math.min(1, currentScroll / (document.documentElement.scrollHeight - height))
+    );
+
+    starYPosition = height * (0.08 + scrollProgress * 0.84);
+}
+if (starY < 0.5) {
+    const scrollProgress = Math.max(
+        0,
+        Math.min(1, currentScroll / (document.documentElement.scrollHeight - height))
+    );
+
+    starYPosition = height * (0.08 + scrollProgress * 0.84);
+
+    const t = starYPosition / height;
+const sway = Math.sin(phase) * width * 0.035;
+
+starX =
+    Math.pow(1 - t, 3) * startX +
+    3 * Math.pow(1 - t, 2) * t * (startX + sway) +
+    3 * (1 - t) * Math.pow(t, 2) * (endX - sway) +
+    Math.pow(t, 3) * endX;
+}
+    drawStar(
+        starX,
+        starYPosition,
+        window.innerWidth * starSize,
+        rotation
+    );
+}
+}
+
+function drawWaves() {
+    // Smoothly follow the page scroll
+    currentScroll += (scrollY - currentScroll) * 0.08;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const progress = currentScroll * 0.0015;
+    const rotation = currentScroll * 0.002;
+
+    // Left wave — smaller star, positioned higher
+drawWave(
+    width * 0.04,
+    width * 0.30,
+    progress,
+    "rgba(35, 130, 255, 0.95)",
+    true,
+    rotation,
+    0.75,
+    0.055
+);
+
+    // Right wave: descends towards the bottom-right
+   drawWave(
+    width * 0.72,
+    width * 0.96,
+    -progress + 1.5,
+    "rgba(100, 185, 255, 0.95)",
+    true,
+    -rotation,
+    0.25,
+    0.12
+);
+    animationFrame = requestAnimationFrame(drawWaves);
+}
+
+window.addEventListener("scroll", () => {
+    scrollY = window.scrollY;
+}, { passive: true });
+
+window.addEventListener("resize", resizeCanvas);
+
+resizeCanvas();
+drawWaves();
+</script>
+<script>
+const unionSection = document.querySelector(".Union-details");
+
+const unionObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            unionSection.classList.add("visible");
+        } else {
+            unionSection.classList.remove("visible");
+        }
+    });
+}, {
+    threshold: 0.2
+});
+
+if (unionSection) {
+    unionObserver.observe(unionSection);
+}
+</script>
+<script>
+const photoSectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+        } else {
+            entry.target.classList.remove("visible");
+        }
+    });
+}, {
+    threshold: 0.2
+});
+
+const photoSectionForObserver = document.querySelector(".photo-section");
+
+if (photoSectionForObserver) {
+    photoSectionObserver.observe(photoSectionForObserver);
+}
+</script>
+```html
+<!-- About Us Section -->
+<section class="about-section" id="about">
+    <h2 class="about-heading">ABOUT US</h2>
+
+    <p>
+        Welcome to HIKMA, the H2 Class Union of Liwa Ul Huda Islamic College,
+        a college under the Samastha National Education Council (SNEC),
+        affiliated with Samastha Kerala Jamiyyathul Ulama.
+    </p>
+
+    <p>
+        HIKMA stands as a platform for inspiring young minds, nurturing talents,
+        and empowering students to achieve their full potential. Guided by the
+        noble ideals of Ahlussunnati Wal Jama'ah, we strive to develop students'
+        intellectual, creative, and moral abilities through meaningful activities,
+        inspiring speeches, literary contributions, and insightful guest talks.
+    </p>
+
+    <p>
+        Our mission is to encourage every student to discover their strengths,
+        express their ideas, enhance their knowledge, and grow into confident,
+        responsible, and talented individuals. Through unity, creativity, knowledge,
+        and dedication, HIKMA aims to create a vibrant learning community where
+        every talent is valued and every mind is inspired.
+    </p>
+</section>
+```
+</body>
+</html>
